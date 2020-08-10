@@ -1,2 +1,2 @@
-# serverless-todo-netlify-fauna
+# serverless-todo
 ## Githubへのアップロードテスト
