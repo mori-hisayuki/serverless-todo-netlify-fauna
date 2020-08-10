@@ -1,4 +1,3 @@
 node_modules
-packages/www/node_modules
-packages/www/.cache
-packages/www/public
+.cache
+public
