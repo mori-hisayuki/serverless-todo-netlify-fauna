@@ -9,11 +9,10 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
+    "@theme-ui/presets": "^0.3.0",
     "gatsby": "^2.24.37",
-    "gatsby-plugin-graphql-codegen": "^2.7.1",
-    "gatsby-plugin-typescript": "^2.4.17",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "typescript": "^3.9.7"
+    "theme-ui": "^0.3.1"
   }
 }
