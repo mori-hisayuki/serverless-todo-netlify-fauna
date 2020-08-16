@@ -1,20 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { Container, Heading, Button, Flex, NavLink} from 'theme-ui'
 import { Link } from 'gatsby'
-import netlifyIdentity from 'netlify-identity-widget'
-
+import { IdentityContext } from '../../identity-context'
 
 export default props => {
-  const [user, setUser] = useState()
-  useEffect(() => {
-    console.log('netlify-identity-widget init')
-    netlifyIdentity.init({})
-    netlifyIdentity.on("login", user => {
-      netlifyIdentity.close()
-      setUser(user)
-    })
-    netlifyIdentity.on("logout", () => setUser())
-  })
+  const {user, identity: netlifyIdentity} = useContext(IdentityContext)
 
   return (
     <Container>
@@ -40,14 +30,6 @@ export default props => {
           }}
         >
           Log In
-        </Button>
-        <Button
-          sx={{ marginTop:2 }}
-          onClick={() =>{
-            console.log(netlifyIdentity.currentUser())
-          }}
-        >
-          Log User
         </Button>
       </Flex>
     </Container>
