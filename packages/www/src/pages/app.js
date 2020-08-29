@@ -15,8 +15,8 @@ let Dash = () => {
           Dashborad
         </NavLink>
         {user && (
-          <NavLink href='#!' p={2}>
-            {user.user_metadata.full_name}
+          <NavLink href='#!' p={2} onClick={() => netlifyIdentity.logout()}>
+            Log out {user.user_metadata.full_name}
           </NavLink>
         )}
       </Flex>
