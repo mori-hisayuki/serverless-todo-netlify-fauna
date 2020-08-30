@@ -17,6 +17,7 @@ const typeDefs = gql`
 `;
 
 const todos = {}
+const todoIndex = 0
 
 const resolvers = {
   Query: {
