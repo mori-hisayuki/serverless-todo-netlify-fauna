@@ -48,9 +48,6 @@ export default () => {
   const { user, identity: netlifyIdentity } = useContext(IdentityContext)
   const [todos, dispatch] = useReducer(todosReducer, [])
   const inputRef = useRef()
-  const [addTodo] = useMutation(ADD_TODO)
-  const [updateTodoDone] = useMutation(UPDATE_TODO_DONE)
-  const { loading, error, data} = useQuery(GET_TODOS)
 
   return (
     <Container>
@@ -67,38 +64,34 @@ export default () => {
           </NavLink>
         )}
       </Flex>
-      <Flex
-        as="form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          addTodo({ variables: { text: inputRef.current.value } });
-          inputRef.current.value = "";
-        }}
-      >
-        <Label sx={{ display: "flex" }}>
+      <Flex as='form' onSubmit={e=>{
+        e.preventDefault()
+        dispatch({ type: 'addTodo', payload: inputRef.current.value})
+        inputRef.current.value = ''
+      }}>
+        <Label sx={{ display: 'flex'}}>
           <span>Add Todo</span>
           <Input ref={inputRef} sx={{ marginLeft: 1 }}></Input>
         </Label>
         <Button sx={{ marginLeft: 1 }}>Submit</Button>
       </Flex>
-      <Flex sx={{ flexDirection: "column" }}>
-        {loading ? <div>loading...</div> : null}
-        {error ? <div>Error: {error.message}</div> : null}
-        {!loading && !error && (
-          <ul sx={{ listStyle: "none" }}>
-            {data.todos.map(todo => (
-              <Flex
-                as="li"
-                onClick={() => {
-                  updateTodoDone({ variables: {id: todo.id}})
+      <Flex sx={{ flexDirection: 'column' }}>
+        <ul sx={{ listStyle: 'none'}}>
+          {todos.map((todo, i) => (
+            <Flex as='li'
+              onClick={e =>{
+                dispatch({
+                  type: 'toggleTodoDone',
+                  payload: i
+                })
+
                 }}
               >
                 <Checkbox checked={todo.done} />
-                <span>{todo.text}</span>
+                <span>{todo.value}</span>
               </Flex>
             ))}
           </ul>
-        )}
       </Flex>
     </Container>
   );
