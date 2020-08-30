@@ -41,7 +41,6 @@ const todosReducer = (state, action) => {
         value: state[action.payload].value
       }
       return newState
-
   }
 }
 
@@ -72,7 +71,7 @@ export default () => {
         as="form"
         onSubmit={(e) => {
           e.preventDefault();
-          addTodo({ variables: { test: inputRef.current.value } });
+          addTodo({ variables: { text: inputRef.current.value } });
           inputRef.current.value = "";
         }}
       >
@@ -84,10 +83,10 @@ export default () => {
       </Flex>
       <Flex sx={{ flexDirection: "column" }}>
         {loading ? <div>loading...</div> : null}
-        {error ? <div>{error.message}</div> : null}
+        {error ? <div>Error: {error.message}</div> : null}
         {!loading && !error && (
           <ul sx={{ listStyle: "none" }}>
-            {todos.map(todo => (
+            {data.todos.map(todo => (
               <Flex
                 as="li"
                 onClick={() => {
@@ -95,7 +94,7 @@ export default () => {
                 }}
               >
                 <Checkbox checked={todo.done} />
-                <span>{todo.value}</span>
+                <span>{todo.text}</span>
               </Flex>
             ))}
           </ul>
