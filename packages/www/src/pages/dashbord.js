@@ -51,7 +51,7 @@ export default () => {
   const [addTodo] = useMutation(ADD_TODO)
   const [updateTodoDone] = useMutation(UPDATE_TODO_DONE)
   const {loading, error, data} = useQuery(GET_TODOS)
-
+  console.log(data)
   return (
     <Container>
       <Flex as="nav">
@@ -91,7 +91,7 @@ export default () => {
                 }}
               >
                 <Checkbox checked={todo.done} />
-                <span>{todo.value}</span>
+                <span>{todo.text}</span>
               </Flex>
             ))}
           </ul>
