@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useReducer } from 'react'
+import React, { useContext, useRef, useReducer } from 'react'
 import { Router, Link } from "@reach/router"
 import { Container, Flex, Button, NavLink, Label, Input, Checkbox } from 'theme-ui'
 import { gql, useMutation, useQuery } from '@apollo/client'
@@ -48,6 +48,9 @@ export default () => {
   const { user, identity: netlifyIdentity } = useContext(IdentityContext)
   const [todos, dispatch] = useReducer(todosReducer, [])
   const inputRef = useRef()
+  const [addTodo] = useMutation(ADD_TODO)
+  const [updateTodoDone] = useMutation(UPDATE_TODO_DONE)
+  const {loading, error, data} = useQuery(GET_TODOS)
 
   return (
     <Container>
@@ -55,7 +58,7 @@ export default () => {
         <NavLink as={Link} to="/" p={2}>
           Home
         </NavLink>
-        <NavLink as={Link} to="/app" p={2}>
+        <NavLink as={Link} to="/dashbord" p={2}>
           Dashborad
         </NavLink>
         {user && (
@@ -66,7 +69,7 @@ export default () => {
       </Flex>
       <Flex as='form' onSubmit={e=>{
         e.preventDefault()
-        dispatch({ type: 'addTodo', payload: inputRef.current.value})
+        addTodo({variables: {text: inputRef.current.value}})
         inputRef.current.value = ''
       }}>
         <Label sx={{ display: 'flex'}}>
@@ -76,15 +79,15 @@ export default () => {
         <Button sx={{ marginLeft: 1 }}>Submit</Button>
       </Flex>
       <Flex sx={{ flexDirection: 'column' }}>
-        <ul sx={{ listStyle: 'none'}}>
-          {todos.map((todo, i) => (
-            <Flex as='li'
-              onClick={e =>{
-                dispatch({
-                  type: 'toggleTodoDone',
-                  payload: i
-                })
-
+        {loading ? <div>loading...</div> : null}
+        {error ? <div>{error.message}</div> : null}
+        {!loading && !error (
+          <ul sx={{ listStyle: 'none'}}>
+            {data.todos.map(todo => (
+              <Flex
+                as='li'
+                onClick={() =>{
+                  updateTodoDone({variables: {id: todo.id}})
                 }}
               >
                 <Checkbox checked={todo.done} />
@@ -92,6 +95,7 @@ export default () => {
               </Flex>
             ))}
           </ul>
+        )}
       </Flex>
     </Container>
   );

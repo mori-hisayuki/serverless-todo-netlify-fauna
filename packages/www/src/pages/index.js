@@ -12,7 +12,7 @@ export default props => {
         <NavLink as={Link} to='/' p={2}>
           Home
         </NavLink>
-        <NavLink as={Link} to='/app' p={2}>
+        <NavLink as={Link} to='/dashbord' p={2}>
           Dashborad
         </NavLink>
         {user && (
