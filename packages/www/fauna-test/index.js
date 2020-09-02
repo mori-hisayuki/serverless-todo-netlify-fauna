@@ -1,8 +1,9 @@
 const faunadb = require('faunadb')
 const q = faunadb.query
 
-console.log('emv:' + process.env.FAUNA)
-var client = new faunadb.Client({ sercret: process.env.FAUNA})
+var client = new faunadb.Client({
+    secret: process.env.FAUNA
+})
 
 async function run() {
     const results = await client.query(
