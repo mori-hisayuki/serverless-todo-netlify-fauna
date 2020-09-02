@@ -9,13 +9,13 @@ async function run() {
     const results = await client.query(
         q.Create(q.Collection('todos'), {
             data: {
-                text: 'whatever',
+                text: 'third',
                 done: false,
-                owner: 'user-test'
+                owner: 'user-test2'
             }
         })
     )
-    console.log(results)
+    console.log(results.ref.id)
 }
 
 run()
