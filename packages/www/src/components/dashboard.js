@@ -42,51 +42,56 @@ export default () => {
   const inputRef = useRef()
   const [addTodo] = useMutation(ADD_TODO);
   const {loading, error, data} = useQuery(GET_TODOS)
-  console.log(data)
 
   return (
     <Container>
-      <Flex as='nav'>
-        <NavLink as={Link} to='/' p={2}>
+      <Flex as="nav">
+        <NavLink as={Link} to="/" p={2}>
           Home
         </NavLink>
-        <NavLink as={Link} to='/app' p={2}>
+        <NavLink as={Link} to="/app" p={2}>
           Dashborad
         </NavLink>
         {user && (
-          <NavLink href='#!' p={2} onClick={() => netlifyIdentity.logout()}>
+          <NavLink href="#!" p={2} onClick={() => netlifyIdentity.logout()}>
             Log out {user.user_metadata.full_name}
           </NavLink>
         )}
       </Flex>
-      <Flex as='form' onSubmit={e=>{
-        e.preventDefault()
-        addTodo({ variables: {text: inputRef.current.value }})
-        inputRef.current.value = ''
-      }}>
-        <Label sx={{ display: 'flex'}}>
+      <Flex
+        as="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          addTodo({ variables: { text: inputRef.current.value } })
+          inputRef.current.value = ''
+        }}
+      >
+        <Label sx={{ display: "flex" }}>
           <span>Add Todo</span>
-          <Input ref={inputRef} sx={{marginLeft: 1}}></Input>
+          <Input ref={inputRef} sx={{ marginLeft: 1 }}></Input>
         </Label>
-        <Button sx={{ marginLeft: 1}}>Submit</Button>
+        <Button sx={{ marginLeft: 1 }}>Submit</Button>
       </Flex>
       <Flex sx={{ flexDirection: 'column' }}>
-        <ul sx={{ listStyle: 'none'}}>
-          {todos.map((todo, i) => (
-            <Flex as='li'
-              onClick={e =>{
-                dispatch({
-                  type: 'toggleTodoDone',
-                  payload: i
-                })
-              }}
-            >
-              <Checkbox checked={todo.done} />
-              <span>{todo.value}</span>
-            </Flex>
-          ))}
-        </ul>
+        {loading ? <div>loading....</div> : ''}
+        {error ? <div>Error: {error.message}</div> : ''}
+        {!loading && !error && (
+          <ul sx={{ listStyle: 'none' }}>
+            {data.todos.map((todo) => (
+              <Flex
+                key={todo.id}
+                as='li'
+                onClick={() => {
+                  console.log('updateTOdoDone')
+                }}
+              >
+                <Checkbox checked={todo.done} readOnly/>
+                <span>{todo.text}</span>
+              </Flex>
+            ))}
+          </ul>
+        )}
       </Flex>
     </Container>
-  )
+  );
 }
