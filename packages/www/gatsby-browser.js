@@ -3,8 +3,7 @@ const {
   ApolloProvider,
   ApolloClient,
   HttpLink,
-  InMemoryCache,
-  gql
+  InMemoryCache
 } = require('@apollo/client')
 const wrapRootElement = require('./wrap-root-element')
 
