@@ -8,8 +8,10 @@ const {
 const wrapRootElement = require('./wrap-root-element')
 
 const client = new ApolloClient({
-  uri: 'https://jamstack-todo-netlify-faunadb.netlify.app/.netlify/functions/graphql',
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  link: new HttpLink({
+    uri: 'https://jamstack-todo-netlify-faunadb.netlify.app/.netlify/functions/graphql',
+  })
 });
 
 exports.wrapRootElement = ({element}) => (
