@@ -1,7 +1,16 @@
 import React, { useContext, useState, useRef, useReducer } from 'react'
 import { Router, Link } from "@reach/router"
 import { Container, Flex, Button, NavLink, Label, Input, Checkbox } from 'theme-ui'
+import { gql, useMutation } from '@apollo/client'
 import { IdentityContext } from '../../identity-context'
+
+const ADD_TODO = gql`
+  mutation AddTodo($type: String!) {
+    addTodo(text: $type) {
+      id
+    }
+  }
+`
 
 const todosReducer = (state, action) => {
   switch(action.type) {
@@ -22,6 +31,7 @@ export default () => {
   const { user, identity: netlifyIdentity } = useContext(IdentityContext)
   const [todos, dispatch] = useReducer(todosReducer, [])
   const inputRef = useRef()
+
   return (
     <Container>
       <Flex as='nav'>
@@ -39,7 +49,6 @@ export default () => {
       </Flex>
       <Flex as='form' onSubmit={e=>{
         e.preventDefault()
-        dispatch({ type: 'addTodo', payload: inputRef.current.value})
         inputRef.current.value = ''
       }}>
         <Label sx={{ display: 'flex'}}>
