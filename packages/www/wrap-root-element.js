@@ -10,6 +10,6 @@ const tokens = {
 
 module.exports = ({element}) => (
   <Provider>
-    <ThemeProvider theme={tokens}>{element}</ThemeProvider>
+      <ThemeProvider theme={tokens}>{element}</ThemeProvider>
   </Provider>
 )
