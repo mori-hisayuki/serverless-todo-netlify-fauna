@@ -6,7 +6,7 @@ import { IdentityContext } from '../../identity-context'
 
 const ADD_TODO = gql`
   mutation AddTodo($type: String!) {
-    addTodo(text: $type) {
+    addTodo(text: "one todo") {
       id
     }
   }
@@ -31,6 +31,8 @@ export default () => {
   const { user, identity: netlifyIdentity } = useContext(IdentityContext)
   const [todos, dispatch] = useReducer(todosReducer, [])
   const inputRef = useRef()
+  const [mutate, { data, error }] = useMutation(ADD_TODO)
+
 
   return (
     <Container>
