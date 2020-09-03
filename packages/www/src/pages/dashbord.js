@@ -1,13 +1,23 @@
 import React, { useContext, useState, useRef, useReducer } from 'react'
 import { Router, Link } from "@reach/router"
 import { Container, Flex, Button, NavLink, Label, Input, Checkbox } from 'theme-ui'
-import { gql, useMutation } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import { IdentityContext } from '../../identity-context'
 
 const ADD_TODO = gql`
-  mutation AddTodo($type: String!) {
-    addTodo(text: "one todo") {
+  mutation AddTodo($text: String!) {
+    addTodo(text: $text) {
       id
+    }
+  }
+`
+
+const GET_TODOS = gql`
+  query GetTodos {
+    todos {
+      id
+      text
+      done
     }
   }
 `
@@ -23,7 +33,6 @@ const todosReducer = (state, action) => {
         value: state[action.payload].value
       }
       return newState
-
   }
 }
 
@@ -31,8 +40,6 @@ export default () => {
   const { user, identity: netlifyIdentity } = useContext(IdentityContext)
   const [todos, dispatch] = useReducer(todosReducer, [])
   const inputRef = useRef()
-  const [mutate, { data, error }] = useMutation(ADD_TODO)
-
 
   return (
     <Container>
