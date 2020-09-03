@@ -40,6 +40,8 @@ export default () => {
   const { user, identity: netlifyIdentity } = useContext(IdentityContext)
   const [todos, dispatch] = useReducer(todosReducer, [])
   const inputRef = useRef()
+  const {loading, error, data} = useQuery(GET_TODOS)
+  console.log(data)
 
   return (
     <Container>
