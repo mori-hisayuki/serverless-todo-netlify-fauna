@@ -34,7 +34,7 @@ export default () => {
   const inputRef = useRef()
   const [addTodo] = useMutation(ADD_TODO);
   const [updateTodoDone] = useMutation(UPDATE_TODO_DONE)
-  const {loading, error, data} = useQuery(GET_TODOS)
+  const {loading, error, data, refetch} = useQuery(GET_TODOS)
 
   return (
     <Container>
@@ -78,6 +78,7 @@ export default () => {
                 onClick={() => {
                   console.log('updateTOdoDone')
                   updateTodoDone({ variables: { id: todo.id } })
+                  console.log("refetching");
                   refetch()
                 }}
               >
