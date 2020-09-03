@@ -11,7 +11,14 @@ const ADD_TODO = gql`
     }
   }
 `
-
+const UPDATE_TODO_DONE = gql`
+  mutation UpdateTodoDone($id: ID!) {
+    updateTodoDone(id: $id) {
+      text
+      done
+    }
+  }
+`
 const GET_TODOS = gql`
   query GetTodos {
     todos {
@@ -22,25 +29,11 @@ const GET_TODOS = gql`
   }
 `
 
-const todosReducer = (state, action) => {
-  switch(action.type) {
-    case 'addTodo':
-      return [{done: false, value: action.payload}, ...state]
-    case 'toggleTodoDone':
-      const newState = [...state]
-      newState[action.payload] = {
-        done: !state[action.payload].done,
-        value: state[action.payload].value
-      }
-      return newState
-  }
-}
-
 export default () => {
   const { user, identity: netlifyIdentity } = useContext(IdentityContext)
-  const [todos, dispatch] = useReducer(todosReducer, [])
   const inputRef = useRef()
   const [addTodo] = useMutation(ADD_TODO);
+  const [updateTodoDone] = useMutation(UPDATE_TODO_DONE)
   const {loading, error, data} = useQuery(GET_TODOS)
 
   return (
@@ -64,6 +57,7 @@ export default () => {
           e.preventDefault();
           addTodo({ variables: { text: inputRef.current.value } })
           inputRef.current.value = ''
+          refetch();
         }}
       >
         <Label sx={{ display: "flex" }}>
@@ -83,6 +77,8 @@ export default () => {
                 as='li'
                 onClick={() => {
                   console.log('updateTOdoDone')
+                  updateTodoDone({ variables: { id: todo.id } })
+                  refetch()
                 }}
               >
                 <Checkbox checked={todo.done} readOnly/>
