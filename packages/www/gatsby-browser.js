@@ -15,19 +15,6 @@ const client = new ApolloClient({
   })
 })
 
-client
-  .query({
-    query: gql`
-      query GetTodos {
-        todos {
-          id
-          text
-          done
-        }
-      }
-    `
-  }).then(result => console.log(result))
-
 exports.wrapRootElement = ({element}) => (
   <ApolloProvider client={client}>
     {wrapRootElement({element})}

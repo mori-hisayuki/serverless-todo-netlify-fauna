@@ -40,6 +40,7 @@ export default () => {
   const { user, identity: netlifyIdentity } = useContext(IdentityContext)
   const [todos, dispatch] = useReducer(todosReducer, [])
   const inputRef = useRef()
+  const [addTodo] = useMutation(ADD_TODO);
   const {loading, error, data} = useQuery(GET_TODOS)
   console.log(data)
 
@@ -60,6 +61,7 @@ export default () => {
       </Flex>
       <Flex as='form' onSubmit={e=>{
         e.preventDefault()
+        addTodo({ variables: {text: inputRef.current.value }})
         inputRef.current.value = ''
       }}>
         <Label sx={{ display: 'flex'}}>
