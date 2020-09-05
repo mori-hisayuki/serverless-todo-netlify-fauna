@@ -53,11 +53,11 @@ export default () => {
       </Flex>
       <Flex
         as="form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          addTodo({ variables: { text: inputRef.current.value } })
+        onSubmit={async e => {
+          e.preventDefault()
+          await addTodo({ variables: { text: inputRef.current.value } })
           inputRef.current.value = ''
-          refetch();
+          await refetch()
         }}
       >
         <Label sx={{ display: "flex" }}>
@@ -75,11 +75,11 @@ export default () => {
               <Flex
                 key={todo.id}
                 as='li'
-                onClick={() => {
+                onClick={async () => {
                   console.log('updateTOdoDone')
-                  updateTodoDone({ variables: { id: todo.id } })
+                  await updateTodoDone({ variables: { id: todo.id } })
                   console.log("refetching");
-                  refetch()
+                  await refetch()
                 }}
               >
                 <Checkbox checked={todo.done} readOnly/>
