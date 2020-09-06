@@ -19,7 +19,7 @@ const typeDefs = gql`
     addTodo(text: String!): Todo
     updateTodoDone(id: ID!): Todo
   }
-`;
+`
 
 const resolvers = {
   Query: {
@@ -55,7 +55,8 @@ const resolvers = {
         id: results.ref.id
       }
     },
-    updateTodoDone: async (_, {id}) => {
+    updateTodoDone: async (_, {id}, {user}) => {
+      if (!user) throw new Error('Must be authenticated to insert todos')
       const results = await client.query(
         q.Update(q.Ref(q.Collection("todos"), id), {
           data: {
