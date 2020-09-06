@@ -23,7 +23,7 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    todos: (parent, args, {user}) => {
+    todos: async (parent, args, {user}) => {
       if (!user) {
         return []
       } else {
