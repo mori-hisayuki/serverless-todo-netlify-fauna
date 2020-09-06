@@ -55,7 +55,7 @@ const resolvers = {
         id: results.ref.id
       }
     },
-    updateTodoDone: (_, {id}) => {
+    updateTodoDone: async (_, {id}) => {
       const results = await client.query(
         q.Update(q.Ref(q.Collection("todos"), id), {
           data: {
