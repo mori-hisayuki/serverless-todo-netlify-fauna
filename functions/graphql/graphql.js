@@ -75,9 +75,15 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+<<<<<<< HEAD
+  context: ({ context }) => {
+    if (context.clientContext.user) {
+      return { user: context.clientContext.user.sub }
+=======
   context: ({context}) => {
     if (context.clientContext.user) {
       return {user: context.clientContext.user.sub }
+>>>>>>> 76c9d8c1cb9f75a56e296f5e51ffe2c9eefbfcb5
     } else {
       return {}
     }
@@ -88,7 +94,11 @@ const server = new ApolloServer({
 
 exports.handler = server.createHandler({
   cors: {
+<<<<<<< HEAD
+    origin: '*',
+=======
     origin: "*",
+>>>>>>> 76c9d8c1cb9f75a56e296f5e51ffe2c9eefbfcb5
     credentials: true
   }
 })
