@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "develop": "gatsby develop",
-    "build": "gatsby build",
+    "build": "NODE_ENV=development gatsby build",
     "clean": "gatsby clean"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
     "faunadb": "^3.0.1",
     "gatsby": "^2.24.37",
     "gatsby-plugin-create-client-paths": "^2.3.10",
+    "graphql": "^15.3.0",
     "netlify-identity-widget": "^1.9.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

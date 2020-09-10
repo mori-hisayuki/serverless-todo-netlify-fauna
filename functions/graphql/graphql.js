@@ -1,4 +1,9 @@
 const {ApolloServer, gql} = require('apollo-server-lambda')
+const faunadb = require('faunadb')
+const q = faunadb.query
+
+const client = new faunadb.Client({secret: process.env.FAUNA})
+
 
 const typeDefs = gql`
   type Query {
@@ -16,28 +21,52 @@ const typeDefs = gql`
   }
 `;
 
-const todos = {}
-let todoIndex = 0
-
 const resolvers = {
   Query: {
-    todos: (parent, args, {user}) => {
+    todos: async (parent, args, {user}) => {
       if (!user) {
         return []
       } else {
-        return Object.values(todos)
+        const results = await client.query(
+            q.Paginate(q.Match(q.Index('todos_by_user'), user))
+        )
+        return results.data.map(([ref, text, done]) => ({
+          id: ref.id,
+          text,
+          done
+        }))
       }
     },
   },
   Mutation: {
-    addTodo: (_, {text}) => {
-      todoIndex++
-      const id = `key-${todoIndex}`
-      todos[id] = {id, text, done: false}
+    addTodo: async (_, {text}, {user}) => {
+      if (!user) throw new Error('Must be authenticated to insert todos')
+      const results = await client.query(
+        q.Create(q.Collection("todos"), {
+          data: {
+            text,
+            done: false,
+            owner: user
+          }
+        })
+      )
+      return {
+        ...results.data,
+        id: results.ref.id
+      }
     },
-    updateTodoDone: (_, {id}) => {
-      todos[id].done = true
-      return todos[id]
+    updateTodoDone: async (_, {id}) => {
+      const results = await client.query(
+        q.Update(q.Ref(q.Collection("todos"), id), {
+          data: {
+            done: true
+          }
+        })
+      )
+      return {
+        ...results.data,
+        id: results.ref.id
+      }
     }
   }
 };
@@ -45,9 +74,15 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+<<<<<<< HEAD
   context: ({ context }) => {
     if (context.clientContext.user) {
       return { user: context.clientContext.user.sub }
+=======
+  context: ({context}) => {
+    if (context.clientContext.user) {
+      return {user: context.clientContext.user.sub }
+>>>>>>> 76c9d8c1cb9f75a56e296f5e51ffe2c9eefbfcb5
     } else {
       return {}
     }
@@ -58,7 +93,11 @@ const server = new ApolloServer({
 
 exports.handler = server.createHandler({
   cors: {
+<<<<<<< HEAD
     origin: '*',
+=======
+    origin: "*",
+>>>>>>> 76c9d8c1cb9f75a56e296f5e51ffe2c9eefbfcb5
     credentials: true
   }
 })

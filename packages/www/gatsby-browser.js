@@ -1,8 +1,12 @@
 const React = require('react')
-const {ApolloProvider, ApolloClient, InMemoryCache, HttpLink} = require('@apollo/client')
-const { setContext } = require('apollo-link-context')
+const {
+  ApolloProvider,
+  ApolloClient,
+  HttpLink,
+  InMemoryCache
+} = require('@apollo/client')
+const { setContext} = require('apollo-link-context')
 const netlifyIdentity = require('netlify-identity-widget')
-
 const wrapRootElement = require('./wrap-root-element')
 
 const authLink = setContext((_, {headers}) => {
@@ -12,13 +16,13 @@ const authLink = setContext((_, {headers}) => {
   return {
     headers: {
       ...headers,
-      Authorization: token  ? `Bearer ${token}` : ""
+      Authorization: token ? `Bearer ${token}` : ''
     }
   }
 })
 
 const httpLink = new HttpLink({
-    url: 'https://jamstack-todo-netlify-faunadb.netlify.app/.netlify/functions/graphql'
+    uri: 'https://jamstack-todo-netlify-faunadb.netlify.app/.netlify/functions/graphql',
 })
 
 const client = new ApolloClient({
@@ -26,8 +30,8 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink)
 })
 
-exports.wrapRootElement = ({ element }) => (
+exports.wrapRootElement = ({element}) => (
   <ApolloProvider client={client}>
-    {wrapRootElement({ element })}
+    {wrapRootElement({element})}
   </ApolloProvider>
 )
